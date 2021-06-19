@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>docker 命令</title>
+      <link href="2021/06/19/docker%E5%91%BD%E4%BB%A4/"/>
+      <url>2021/06/19/docker%E5%91%BD%E4%BB%A4/</url>
+      
+        <content type="html"><![CDATA[<h1 id="一、docker-基础命令"><a href="#一、docker-基础命令" class="headerlink" title="一、docker 基础命令"></a>一、docker 基础命令</h1><p>1、更新容器自动重启</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker update --restart=always 容器名称</span><br></pre></td></tr></table></figure><p>2、进入容器</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it 容器名称 /bin/bash</span><br></pre></td></tr></table></figure><span id="more"></span>      ]]></content>
+      
+      
+      <categories>
+          
+          <category> Docker </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 容器 </tag>
+            
+            <tag> docker </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>vim 使用等级</title>
       <link href="2021/06/19/vim%E4%BD%BF%E7%94%A8%E7%AD%89%E7%BA%A7/"/>
       <url>2021/06/19/vim%E4%BD%BF%E7%94%A8%E7%AD%89%E7%BA%A7/</url>

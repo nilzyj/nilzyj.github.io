@@ -6,7 +6,7 @@
   <link href="https://nilzyj.github.io/atom.xml" rel="self"/>
   
   <link href="https://nilzyj.github.io/"/>
-  <updated>2021-06-19T03:49:13.220Z</updated>
+  <updated>2021-06-19T06:06:20.526Z</updated>
   <id>https://nilzyj.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>docker 命令</title>
+    <link href="https://nilzyj.github.io/2021/06/19/docker%E5%91%BD%E4%BB%A4/"/>
+    <id>https://nilzyj.github.io/2021/06/19/docker%E5%91%BD%E4%BB%A4/</id>
+    <published>2021-06-19T03:48:10.000Z</published>
+    <updated>2021-06-19T06:06:20.526Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="一、docker-基础命令"><a href="#一、docker-基础命令" class="headerlink" title="一、docker 基础命令"></a>一、docker 基础命令</h1><p>1、更新容器自动重启</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker update --restart=always 容器名称</span><br></pre></td></tr></table></figure><p>2、进入容器</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it 容器名称 /bin/bash</span><br></pre></td></tr></table></figure><span id="more"></span>      ]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;一、docker-基础命令&quot;&gt;&lt;a href=&quot;#一、docker-基础命令&quot; class=&quot;headerlink&quot; title=&quot;一、docker 基础命令&quot;&gt;&lt;/a&gt;一、docker 基础命令&lt;/h1&gt;&lt;p&gt;1、更新容器自动重启&lt;/p&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;docker update --restart=always 容器名称&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;2、进入容器&lt;/p&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;docker exec -it 容器名称 /bin/bash&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="Docker" scheme="https://nilzyj.github.io/categories/Docker/"/>
+    
+    
+    <category term="容器" scheme="https://nilzyj.github.io/tags/%E5%AE%B9%E5%99%A8/"/>
+    
+    <category term="docker" scheme="https://nilzyj.github.io/tags/docker/"/>
+    
+  </entry>
   
   <entry>
     <title>vim 使用等级</title>
