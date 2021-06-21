@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://nilzyj.github.io/2021/06/21/%E8%BD%AF%E4%BB%B6%E9%83%A8%E7%BD%B2/</loc>
+    
+    <lastmod>2021-06-21</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://nilzyj.github.io/2021/06/21/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/</loc>
     
     <lastmod>2021-06-21</lastmod>
@@ -12,13 +19,6 @@
     <loc>https://nilzyj.github.io/2021/06/17/vim%E4%BD%BF%E7%94%A8%E7%AD%89%E7%BA%A7/</loc>
     
     <lastmod>2021-06-21</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://nilzyj.github.io/2021/06/18/%E8%BD%AF%E4%BB%B6%E9%83%A8%E7%BD%B2/</loc>
-    
-    <lastmod>2021-06-19</lastmod>
     
   </url>
   
@@ -94,6 +94,13 @@
     <priority>0.6</priority>
   </url>
   
+  <url>
+    <loc>https://nilzyj.github.io/tags/%E6%9E%B6%E6%9E%84/</loc>
+    <lastmod>2021-06-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 
   
   <url>
@@ -112,6 +119,13 @@
   
   <url>
     <loc>https://nilzyj.github.io/categories/Docker/</loc>
+    <lastmod>2021-06-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://nilzyj.github.io/categories/%E6%9E%B6%E6%9E%84/</loc>
     <lastmod>2021-06-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
