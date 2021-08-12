@@ -81,6 +81,31 @@
     
     
     <entry>
+      <title>jar包运行内存限制</title>
+      <link href="2021/06/19/%E8%BF%90%E8%A1%8Cjar%E5%8C%85%E5%86%85%E5%AD%98%E9%99%90%E5%88%B6/"/>
+      <url>2021/06/19/%E8%BF%90%E8%A1%8Cjar%E5%8C%85%E5%86%85%E5%AD%98%E9%99%90%E5%88%B6/</url>
+      
+        <content type="html"><![CDATA[<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup java -Xms1024m -Xmx1024m -XX:PermSize=256m -XX:MaxPermSize=512m -XX:MaxNewSize=512m -jar WebServer.jar &gt;&gt; /data/logs/WebServer.log <span class="number">2</span>&gt;&amp;<span class="number">1</span> &amp;</span><br></pre></td></tr></table></figure><p>说明：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-Xms1024m 配置初始堆内存1024m;</span><br><span class="line">-Xmx1024m 配置最大堆内存1024m;</span><br><span class="line">-XX:PermSize=256m Perm（俗称方法区）占整个堆内存的值；</span><br><span class="line">-XX:MaxPermSize=512m 方法区占整个堆内存的最大值</span><br><span class="line">-XX:MaxNewSize=512m 新生代内存上限值</span><br></pre></td></tr></table></figure><span id="more"></span>      ]]></content>
+      
+      
+      <categories>
+          
+          <category> java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> jar </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>vim 使用等级</title>
       <link href="2021/06/17/vim%E4%BD%BF%E7%94%A8%E7%AD%89%E7%BA%A7/"/>
       <url>2021/06/17/vim%E4%BD%BF%E7%94%A8%E7%AD%89%E7%BA%A7/</url>

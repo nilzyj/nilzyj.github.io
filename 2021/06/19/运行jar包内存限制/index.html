@@ -4,14 +4,19 @@
   <meta charset="utf-8">
   
   
-  <title>Archives: 2019 | nilzyj&#39;s blog</title>
+  <title>jar包运行内存限制 | nilzyj&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="nilzyj&#39;s blog">
-<meta property="og:url" content="https://nilzyj.github.io/archives/2019/index.html">
+  <meta name="description" content="1nohup java -Xms1024m -Xmx1024m -XX:PermSize&#x3D;256m -XX:MaxPermSize&#x3D;512m -XX:MaxNewSize&#x3D;512m -jar WebServer.jar &gt;&gt; &#x2F;data&#x2F;logs&#x2F;WebServer.log 2&gt;&amp;1 &amp; 说明： 12345-Xms1024m 配置初始堆内存1024m;-Xmx10">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jar包运行内存限制">
+<meta property="og:url" content="https://nilzyj.github.io/2021/06/19/%E8%BF%90%E8%A1%8Cjar%E5%8C%85%E5%86%85%E5%AD%98%E9%99%90%E5%88%B6/index.html">
 <meta property="og:site_name" content="nilzyj&#39;s blog">
+<meta property="og:description" content="1nohup java -Xms1024m -Xmx1024m -XX:PermSize&#x3D;256m -XX:MaxPermSize&#x3D;512m -XX:MaxNewSize&#x3D;512m -jar WebServer.jar &gt;&gt; &#x2F;data&#x2F;logs&#x2F;WebServer.log 2&gt;&amp;1 &amp; 说明： 12345-Xms1024m 配置初始堆内存1024m;-Xmx10">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-06-19T06:10:10.000Z">
+<meta property="article:modified_time" content="2021-08-12T11:37:47.442Z">
 <meta property="article:author" content="张殷杰">
+<meta property="article:tag" content="jar">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="nilzyj's blog" type="application/atom+xml">
@@ -69,58 +74,73 @@
 </header>
 
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/03/23/Hexo%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="archive-article-date">
-  <time class="dt-published" datetime="2019-03-23T03:41:10.000Z" itemprop="datePublished">Mar 23</time>
+        <section id="main"><article id="post-运行jar包内存限制" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/06/19/%E8%BF%90%E8%A1%8Cjar%E5%8C%85%E5%86%85%E5%AD%98%E9%99%90%E5%88%B6/" class="article-date">
+  <time class="dt-published" datetime="2021-06-19T06:10:10.000Z" itemprop="datePublished">2021-06-19</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/23/Hexo%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">Hexo 使用记录</a>
+    <h1 class="p-name article-title" itemprop="headline name">
+      jar包运行内存限制
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/03/23/vim%E5%BF%AB%E6%8D%B7%E9%94%AE%E5%88%97%E8%A1%A8/" class="archive-article-date">
-  <time class="dt-published" datetime="2019-03-23T03:41:10.000Z" itemprop="datePublished">Mar 23</time>
-</a>
+    <div class="e-content article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/23/vim%E5%BF%AB%E6%8D%B7%E9%94%AE%E5%88%97%E8%A1%A8/">vim 快捷键列表</a>
-    </h1>
-  
+        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup java -Xms1024m -Xmx1024m -XX:PermSize=256m -XX:MaxPermSize=512m -XX:MaxNewSize=512m -jar WebServer.jar &gt;&gt; /data/logs/WebServer.log <span class="number">2</span>&gt;&amp;<span class="number">1</span> &amp;</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-Xms1024m 配置初始堆内存1024m;</span><br><span class="line">-Xmx1024m 配置最大堆内存1024m;</span><br><span class="line">-XX:PermSize=256m Perm（俗称方法区）占整个堆内存的值；</span><br><span class="line">-XX:MaxPermSize=512m 方法区占整个堆内存的最大值</span><br><span class="line">-XX:MaxNewSize=512m 新生代内存上限值</span><br></pre></td></tr></table></figure>
 
-    </header>
+
+<span id="more"></span>      
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://nilzyj.github.io/2021/06/19/%E8%BF%90%E8%A1%8Cjar%E5%8C%85%E5%86%85%E5%AD%98%E9%99%90%E5%88%B6/" data-id="cks8ul0ml000b70vl8khu0o1d" data-title="jar包运行内存限制" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jar/" rel="tag">jar</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/06/19/docker%E5%91%BD%E4%BB%A4/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          docker 命令
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/06/17/vim%E4%BD%BF%E7%94%A8%E7%AD%89%E7%BA%A7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">vim 使用等级</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
 
 </section>
