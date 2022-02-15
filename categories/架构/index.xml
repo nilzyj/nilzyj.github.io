@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>架构 on My New Hugo Site</title>
-    <link>https://nilzyj.github.io/categories/%E6%9E%B6%E6%9E%84/</link>
+    <link>http://example.org/categories/%E6%9E%B6%E6%9E%84/</link>
     <description>Recent content in 架构 on My New Hugo Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 21 Jun 2021 17:29:10 +0000</lastBuildDate><atom:link href="https://nilzyj.github.io/categories/%E6%9E%B6%E6%9E%84/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 21 Jun 2021 17:29:10 +0000</lastBuildDate><atom:link href="http://example.org/categories/%E6%9E%B6%E6%9E%84/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>微服务架构</title>
-      <link>https://nilzyj.github.io/framework/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/</link>
+      <link>http://example.org/framework/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/</link>
       <pubDate>Mon, 21 Jun 2021 17:29:10 +0000</pubDate>
       
-      <guid>https://nilzyj.github.io/framework/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/</guid>
+      <guid>http://example.org/framework/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/</guid>
       <description>支撑服务：负载均衡、网关、服务发现、集中配置、容错限流、认证授权、日志聚合、监控告警、灰度发布
 平台服务PaaS：发布系统、集群资源调度、镜像治理、资源治理
 基础设施LaaS：计算、网格、存储、NOC监控、安全
@@ -23,10 +23,10 @@
     
     <item>
       <title>软件部署</title>
-      <link>https://nilzyj.github.io/framework/%E8%BD%AF%E4%BB%B6%E9%83%A8%E7%BD%B2/</link>
+      <link>http://example.org/framework/%E8%BD%AF%E4%BB%B6%E9%83%A8%E7%BD%B2/</link>
       <pubDate>Mon, 21 Jun 2021 17:29:10 +0800</pubDate>
       
-      <guid>https://nilzyj.github.io/framework/%E8%BD%AF%E4%BB%B6%E9%83%A8%E7%BD%B2/</guid>
+      <guid>http://example.org/framework/%E8%BD%AF%E4%BB%B6%E9%83%A8%E7%BD%B2/</guid>
       <description>一、Docker安装 Docker安装系统要求：
 CentOS 7，要求系统为64位、系统内核版本为 3.10 以上。 CentOS-6.5 或更高的版本的 CentOS 上，要求系统为64位、系统内核版本为 2.6.32-431 或者更高版本。
 （1）查看当前的内核版本 uname -r （2）安装需要的软件包， yum-util 提供yum-config-manager功能，另外两个是devicemapper驱动依赖的 yum install -y yum-utils device-mapper-persistent-data lvm2 （3）设置yum源 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo （4）查看所有仓库中所有docker版本，并选择特定版本安装 yum list docker-ce --showduplicates | sort -r （5）安装docker yum install docker-ce # 由于repo中默认只开启stable仓库，故这里安装的是最新稳定版 或者安装特定版本，例如

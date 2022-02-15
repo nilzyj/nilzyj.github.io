@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>软件部署 | My New Hugo Site</title>
+<meta name="keywords" content="架构" />
+<meta name="description" content="一、Docker安装 Docker安装系统要求：
+CentOS 7，要求系统为64位、系统内核版本为 3.10 以上。 CentOS-6.5 或更高的版本的 CentOS 上，要求系统为64位、系统内核版本为 2.6.32-431 或者更高版本。
+（1）查看当前的内核版本 uname -r （2）安装需要的软件包， yum-util 提供yum-config-manager功能，另外两个是devicemapper驱动依赖的 yum install -y yum-utils device-mapper-persistent-data lvm2 （3）设置yum源 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo （4）查看所有仓库中所有docker版本，并选择特定版本安装 yum list docker-ce --showduplicates | sort -r （5）安装docker yum install docker-ce # 由于repo中默认只开启stable仓库，故这里安装的是最新稳定版 或者安装特定版本，例如
+yum install docker-ce-17.12.0.ce （6）添加阿里云镜像加速 mkdir -p /etc/docker tee /etc/docker/daemon.json &lt;&lt;-&#39;EOF&#39; { &#34;registry-mirrors&#34;: [&#34;https://phuumrx6.mirror.aliyuncs.com&#34;] } EOF （7）启动并加入开机启动 systemctl start docker # 启动docker systemctl enable docker # 将docker加入开机启动 （8）验证安装是否成功 docker version # 有client和service两部分表示docker安装启动都成功了 （9）相关命令 systemctl daemon-reload # 重载所有修改过的配置文件 systemctl restart docker # 重启docker 二、docker安装mysql（主从） （1）拉取mysql镜像 docker pull mysql:5.">
+<meta name="author" content="">
+<link rel="canonical" href="http://example.org/framework/%E8%BD%AF%E4%BB%B6%E9%83%A8%E7%BD%B2/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js" integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5&#43;kdJvBz5iKbt6B5PJI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://example.org/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://example.org/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://example.org/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://example.org/apple-touch-icon.png">
+<link rel="mask-icon" href="http://example.org/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<meta name="generator" content="Hugo 0.92.2" />
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="软件部署" />
+<meta property="og:description" content="一、Docker安装 Docker安装系统要求：
+CentOS 7，要求系统为64位、系统内核版本为 3.10 以上。 CentOS-6.5 或更高的版本的 CentOS 上，要求系统为64位、系统内核版本为 2.6.32-431 或者更高版本。
+（1）查看当前的内核版本 uname -r （2）安装需要的软件包， yum-util 提供yum-config-manager功能，另外两个是devicemapper驱动依赖的 yum install -y yum-utils device-mapper-persistent-data lvm2 （3）设置yum源 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo （4）查看所有仓库中所有docker版本，并选择特定版本安装 yum list docker-ce --showduplicates | sort -r （5）安装docker yum install docker-ce # 由于repo中默认只开启stable仓库，故这里安装的是最新稳定版 或者安装特定版本，例如
+yum install docker-ce-17.12.0.ce （6）添加阿里云镜像加速 mkdir -p /etc/docker tee /etc/docker/daemon.json &lt;&lt;-&#39;EOF&#39; { &#34;registry-mirrors&#34;: [&#34;https://phuumrx6.mirror.aliyuncs.com&#34;] } EOF （7）启动并加入开机启动 systemctl start docker # 启动docker systemctl enable docker # 将docker加入开机启动 （8）验证安装是否成功 docker version # 有client和service两部分表示docker安装启动都成功了 （9）相关命令 systemctl daemon-reload # 重载所有修改过的配置文件 systemctl restart docker # 重启docker 二、docker安装mysql（主从） （1）拉取mysql镜像 docker pull mysql:5." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/framework/%E8%BD%AF%E4%BB%B6%E9%83%A8%E7%BD%B2/" /><meta property="article:section" content="framework" />
+<meta property="article:published_time" content="2021-06-21T17:29:10&#43;08:00" />
+<meta property="article:modified_time" content="2021-06-21T17:29:10&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="软件部署"/>
+<meta name="twitter:description" content="一、Docker安装 Docker安装系统要求：
+CentOS 7，要求系统为64位、系统内核版本为 3.10 以上。 CentOS-6.5 或更高的版本的 CentOS 上，要求系统为64位、系统内核版本为 2.6.32-431 或者更高版本。
+（1）查看当前的内核版本 uname -r （2）安装需要的软件包， yum-util 提供yum-config-manager功能，另外两个是devicemapper驱动依赖的 yum install -y yum-utils device-mapper-persistent-data lvm2 （3）设置yum源 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo （4）查看所有仓库中所有docker版本，并选择特定版本安装 yum list docker-ce --showduplicates | sort -r （5）安装docker yum install docker-ce # 由于repo中默认只开启stable仓库，故这里安装的是最新稳定版 或者安装特定版本，例如
+yum install docker-ce-17.12.0.ce （6）添加阿里云镜像加速 mkdir -p /etc/docker tee /etc/docker/daemon.json &lt;&lt;-&#39;EOF&#39; { &#34;registry-mirrors&#34;: [&#34;https://phuumrx6.mirror.aliyuncs.com&#34;] } EOF （7）启动并加入开机启动 systemctl start docker # 启动docker systemctl enable docker # 将docker加入开机启动 （8）验证安装是否成功 docker version # 有client和service两部分表示docker安装启动都成功了 （9）相关命令 systemctl daemon-reload # 重载所有修改过的配置文件 systemctl restart docker # 重启docker 二、docker安装mysql（主从） （1）拉取mysql镜像 docker pull mysql:5."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Frameworks",
+      "item": "http://example.org/framework/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "软件部署",
+      "item": "http://example.org/framework/%E8%BD%AF%E4%BB%B6%E9%83%A8%E7%BD%B2/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "软件部署",
+  "name": "软件部署",
+  "description": "一、Docker安装 Docker安装系统要求：\nCentOS 7，要求系统为64位、系统内核版本为 3.10 以上。 CentOS-6.5 或更高的版本的 CentOS 上，要求系统为64位、系统内核版本为 2.6.32-431 或者更高版本。\n（1）查看当前的内核版本 uname -r （2）安装需要的软件包， yum-util 提供yum-config-manager功能，另外两个是devicemapper驱动依赖的 yum install -y yum-utils device-mapper-persistent-data lvm2 （3）设置yum源 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo （4）查看所有仓库中所有docker版本，并选择特定版本安装 yum list docker-ce --showduplicates | sort -r （5）安装docker yum install docker-ce # 由于repo中默认只开启stable仓库，故这里安装的是最新稳定版 或者安装特定版本，例如\nyum install docker-ce-17.12.0.ce （6）添加阿里云镜像加速 mkdir -p /etc/docker tee /etc/docker/daemon.json \u0026lt;\u0026lt;-\u0026#39;EOF\u0026#39; { \u0026#34;registry-mirrors\u0026#34;: [\u0026#34;https://phuumrx6.mirror.aliyuncs.com\u0026#34;] } EOF （7）启动并加入开机启动 systemctl start docker # 启动docker systemctl enable docker # 将docker加入开机启动 （8）验证安装是否成功 docker version # 有client和service两部分表示docker安装启动都成功了 （9）相关命令 systemctl daemon-reload # 重载所有修改过的配置文件 systemctl restart docker # 重启docker 二、docker安装mysql（主从） （1）拉取mysql镜像 docker pull mysql:5.",
+  "keywords": [
+    "架构"
+  ],
+  "articleBody": "一、Docker安装 Docker安装系统要求：\nCentOS 7，要求系统为64位、系统内核版本为 3.10 以上。 CentOS-6.5 或更高的版本的 CentOS 上，要求系统为64位、系统内核版本为 2.6.32-431 或者更高版本。\n（1）查看当前的内核版本 uname -r （2）安装需要的软件包， yum-util 提供yum-config-manager功能，另外两个是devicemapper驱动依赖的 yum install -y yum-utils device-mapper-persistent-data lvm2 （3）设置yum源 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo （4）查看所有仓库中所有docker版本，并选择特定版本安装 yum list docker-ce --showduplicates | sort -r （5）安装docker yum install docker-ce # 由于repo中默认只开启stable仓库，故这里安装的是最新稳定版 或者安装特定版本，例如\nyum install docker-ce-17.12.0.ce （6）添加阿里云镜像加速 mkdir -p /etc/docker tee /etc/docker/daemon.json { \"registry-mirrors\": [\"https://phuumrx6.mirror.aliyuncs.com\"] } EOF （7）启动并加入开机启动 systemctl start docker # 启动docker systemctl enable docker # 将docker加入开机启动 （8）验证安装是否成功 docker version # 有client和service两部分表示docker安装启动都成功了 （9）相关命令 systemctl daemon-reload # 重载所有修改过的配置文件 systemctl restart docker # 重启docker 二、docker安装mysql（主从） （1）拉取mysql镜像 docker pull mysql:5.7.34 （2）分别启动主从容器 docker run \\  --restart always \\  --name mysql-master \\  --privileged=true \\  -v /etc/localtime:/etc/localtime -p 3306:3306 \\  -e MYSQL_ROOT_PASSWORD=123456 \\  -v /home/mysql/master/conf:/etc/mysql \\ # 此处配置文件可以从未配置该映射的容器中通过docker cp拷贝 -v /home/mysql/master/data:/var/lib/mysql \\  -d mysql:5.7.34 # master 对外映射3306 docker run \\  --restart always \\  --name mysql-master \\  --privileged=true \\  -v /etc/localtime:/etc/localtime -p 3307:3306 \\  -e MYSQL_ROOT_PASSWORD=123456 \\  -v /home/mysql/slave/conf:/etc/mysql \\ # 此处配置文件可以从未配置该映射的容器中通过docker cp拷贝 -v /home/mysql/slave/data:/var/lib/mysql \\  -d mysql:5.7.34 # slave 对外映射3307 （3）配置master # 在宿主机中修改配置 vim master/conf/mysql.conf.d/mysqld.cnf # 添加 server-id=1 # 同一局域网内要唯一 log-bin=mysql-master-bin # 开启二进制日志功能 修改完配置重启mysql-master\ndocker restart mysql-master （4）在master数据库中创建数据同步用户 连接mysql-master数据库\ndocker exec -it mysql-master mysql -uroot -p 创建用户并修改权限\nCREATE USER 'slave'@'%' IDENTIFIED BY '123456'; GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'slave'@'%'; （5）配置slave # 在宿主机中修改配置 vim slave/conf/mysql.conf.d/mysqld.cnf # 添加 service-id=2 # 同一局域网内要唯一 log-bin=mysql-slave-bin # 开启二进制日志，以备Slave作为其它Slave的Master时使用 relay_log=mysql-relay-bin # 中继日志 （6）关联master和slave # 进入mysql-master docker exec -it mysql-master /bin/bash # 查看File和Position，用于关联 show master status \\G; # 获取mysql-master容器ip地址 docker inspect --format='{{.NetworkSettings.IPAddress}}' mysql-master # 进入mysql-slave # master_port：master容器的端口号 # master_user：master中用于数据同步的用户 # master_password：master中数据同步用户的密码 # master_log_file：指定 slave 从哪个日志文件开始复制数据，即 show master status 中 File 字段的值 # master_log_pos：从哪个位置开始读，即 show master status 中 Position 字段的值 master_connect_retry：如果连接失败，重试的时间间隔，单位是秒，默认是60秒 change master to master_host='172.17.0.3', master_user='slave', master_password='123456', master_port=3306, master_log_file='mysql-master-bin.000001', master_log_pos=1510, master_connect_retry=30; （7）查看主从同步状态 # 开启主从同步，从库只会增量同步主库 start slave # 查看状态，Slave_IO_Running 和 Slave_SQL_Running 都为Yes则正常。失败日志查看Last_IO_Error show slave status \\G; # 关闭主从同步 stop slave 三、安装单机nacos 官方文档\n（1）下载安装nacos # 下载nacos wget https://github.com/alibaba/nacos/releases/download/2.0.2/nacos-server-2.0.2.zip # 解压 unzip nacos-server-2.0.2.zip （2）配置mysql数据库 # 将nacos/conf/nacos-mysql.sql 导入到mysql数据库 vim nacos/conf/application.properties ### If use MySQL as datasource: spring.datasource.platform=mysql ### Count of DB: db.num=1 ### Connect URL of DB: db.url.0=jdbc:mysql://127.0.0.1:3306/nacos?characterEncoding=utf8\u0026connectTimeout=1000\u0026socketTimeout=3000\u0026autoReconnect=true\u0026useUnicode=true\u0026useSSL=false\u0026serverTimezone=UTC db.user.0=root db.password.0=123456 （3）启动nacos cd nacos/bin\r# 单机版启动\rsh startup.sh -m standalone\r四、安装InfluxDB （1）拉取InfluxDB镜像 docker pull influxdb:2.0.7 （2）创建桥接网络 docker network create --driver bridge influxdb-telegraf-net\r（3）生成默认配置文件 docker run \\\r--rm influxdb:2.0.7 \\\rinfluxd print-config  config.yml\r（4）启动InfluxDB docker run -d \\  --name influxdb \\  -p 8086:8086 \\  -v /home/influxdb/configs/config.yml:/etc/influxdb2/config.yml \\  -v /home/influxdb/configs:/etc/influxdb2 \\  -v /home/influxdb/data:/var/lib/influxdb2 \\  -v /home/influxdb/influx:/root/.influxdbv2 \\  --net=influxdb-telegraf-net \\  influxdb:2.0.7 （5）配置InfluxDB # 进入influxdb容器 docker exec -it influxdb /bin/bash # 安装，设置用户名密码、org、bucket，生成token influx setup 五、安装Telegraf 官方文档\n（1）拉取telegraf镜像 docker pull telegraf （2）启动Telegraf docker run -d \\  --name telegraf \\  -v /home/telegraf/conf:/etc/telegraf \\  --net=influxdb-telegraf-net \\  telegraf 六、安装Grafana （1）拉取grafana镜像 docker pull grafana/grafana （2）启动grafana docker run -d --name grafana -p 3000:3000 -v /home/grafana/data:/var/lib/grafana grafana/grafana Spring Cloud Alibaba 1、Nacos 一个更易于构建云原生应用的动态服务发现、配置管理和服务管理平台。版本：2.0.1\nnacos包\n单机模式启动：\nsh startup.sh -m standalone 2、Sentinel 把流量作为切入点，从流量控制、熔断降级、系统负载保护等多个维度保护服务的稳定性。版本：1.8.2\nsentinel-dashboard控制台jar包\n启动sentinel控制台：\njava -Dserver.port=8080 -Dcsp.sentinel.dashboard.server=localhost:8080 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard-1.8.2.jar Spring Cloud Gateway 网关接入到 Sentinel 控制台，在pom中添加：\n com.alibaba.cloud spring-cloud-starter-alibaba-sentinel   com.alibaba.csp sentinel-spring-cloud-gateway-adapter  3、RocketMQ 开源的分布式消息系统，基于高可用分布式集群技术，提供低延时的、高可靠的消息发布与订阅服务。\n4、Dubbo 使用 Dubbo RPC 作为服务间调用。\n引入dubbo：\n com.alibaba.cloud spring-cloud-starter-dubbo  配置web-demo-service作为provider，在application.yml中添加以下配置：\ndubbo: registry: # 使用 spring cloud 注册中心 address: spring-cloud://localhost protocol: name: dubbo port: -1 # 传输对象实现序列化接口即可 # serialization: kryo cloud: subscribed-services: web-oauth-service # 可不填，不填会默认订阅所有service consumer: check: false provider: # 轮询 loadbalance: roundrobin scan: # provider service base-packages: com.ms.cloud.demo.service.impl 实现provider服务：web-common模块中定义service接口UserService。web-demo-service中的UserServiceImpl实现UserService，并在UserServiceImpl上添加@DubboService。\n配置web-oauth-service作为consumer，在application.yml中添加以下配置：\ndubbo: registry: # 使用 spring cloud 注册中心 address: spring-cloud://localhost protocol: name: dubbo port: -1 # 传输对象实现序列化接口即可 # serialization: kryo cloud: subscribed-services: web-demo-service consumer: check: false provider: # 轮询 loadbalance: roundrobin consumer中使用provider提供的服务：\n@DubboReference\rprivate UserService userService;\r5、Seata 一个易于使用的高性能微服务分布式事务解决方案。\n6、Arthas 开源的Java动态追踪工具，基于字节码增强技术，功能非常强大。\n7、Spring Cloud Loadbalancer 客户端负载均衡。\n8、Spring Cloud Gateway 服务网关。\n转发认证请求到web-oauth-service或业务请求到其他服务；对过滤路径鉴权；\n网关鉴权过滤器：\nAuthFilter.filter\r9、Spring-boot-admin 健康服务检查。\n10、Oauth2 + JWT 认证鉴权。\n登录认证接口：http://localhost:9001/web-oauth-service/login\n认证流程：web-oauth服务\n1、入口，安全过滤器链中配置UsernameAuthenticationFilter 2、UsernameAuthenticationFilter.attemptAuthentication() - authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password)) // 获取请求参数，构造UsernamePasswordAuthenticationToken进行认证 3、ProviderManager.authenticate - provider.authenticate(authentication) 4、AbstractUserDetailsAuthenticationProvider.authenticate() - retrieveUser(username, (UsernamePasswordAuthenticationToken) authentication) 5、DaoAuthenticationProvider.retrieveUser - this.getUserDetailsService().loadUserByUsername(username) 6、UserDetailsServiceImpl.loadUserByUsername() 7、JWTAuthenticationSuccessHandler.onAuthenticationSuccess() 鉴权流程：gateway服务\n1、入口，配置过滤器AuthFilter实现GlobalFilter 2、AuthFilter.filter进行校验 3、请求头包含token，则校验token 4、判断是否是过滤路径 5、判断请求url是否有权限 6、请求头不包含token，则判断4、5 ",
+  "wordCount" : "606",
+  "inLanguage": "en",
+  "datePublished": "2021-06-21T17:29:10+08:00",
+  "dateModified": "2021-06-21T17:29:10+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://example.org/framework/%E8%BD%AF%E4%BB%B6%E9%83%A8%E7%BD%B2/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "My New Hugo Site",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://example.org/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://example.org/" accesskey="h" title="My New Hugo Site (Alt + H)">My New Hugo Site</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      软件部署<sup><span class="entry-isdraft">&nbsp;&nbsp;[draft]</span></sup>
+    </h1>
+    <div class="post-meta"><span title='2021-06-21 17:29:10 +0800 CST'>June 21, 2021</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h1 id="一docker安装">一、Docker安装<a hidden class="anchor" aria-hidden="true" href="#一docker安装">#</a></h1>
+<p>Docker安装系统要求：</p>
+<p>CentOS 7，要求系统为64位、系统内核版本为 3.10 以上。
+CentOS-6.5 或更高的版本的 CentOS 上，要求系统为64位、系统内核版本为 2.6.32-431 或者更高版本。</p>
+<h3 id="1查看当前的内核版本">（1）查看当前的内核版本<a hidden class="anchor" aria-hidden="true" href="#1查看当前的内核版本">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">uname -r
+</code></pre></div><h3 id="2安装需要的软件包-yum-util-提供yum-config-manager功能另外两个是devicemapper驱动依赖的">（2）安装需要的软件包， yum-util 提供yum-config-manager功能，另外两个是devicemapper驱动依赖的<a hidden class="anchor" aria-hidden="true" href="#2安装需要的软件包-yum-util-提供yum-config-manager功能另外两个是devicemapper驱动依赖的">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yum install -y yum-utils device-mapper-persistent-data lvm2
+</code></pre></div><h3 id="3设置yum源">（3）设置yum源<a hidden class="anchor" aria-hidden="true" href="#3设置yum源">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+</code></pre></div><h3 id="4查看所有仓库中所有docker版本并选择特定版本安装">（4）查看所有仓库中所有docker版本，并选择特定版本安装<a hidden class="anchor" aria-hidden="true" href="#4查看所有仓库中所有docker版本并选择特定版本安装">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yum list docker-ce --showduplicates | sort -r
+</code></pre></div><h3 id="5安装docker">（5）安装docker<a hidden class="anchor" aria-hidden="true" href="#5安装docker">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yum install docker-ce  <span style="color:#75715e"># 由于repo中默认只开启stable仓库，故这里安装的是最新稳定版</span>
+</code></pre></div><p>或者安装特定版本，例如</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yum install docker-ce-17.12.0.ce
+</code></pre></div><h3 id="6添加阿里云镜像加速">（6）添加阿里云镜像加速<a hidden class="anchor" aria-hidden="true" href="#6添加阿里云镜像加速">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p /etc/docker
+tee /etc/docker/daemon.json <span style="color:#e6db74">&lt;&lt;-&#39;EOF&#39;
+</span><span style="color:#e6db74">{
+</span><span style="color:#e6db74">  &#34;registry-mirrors&#34;: [&#34;https://phuumrx6.mirror.aliyuncs.com&#34;]
+</span><span style="color:#e6db74">}
+</span><span style="color:#e6db74">EOF</span>
+</code></pre></div><h3 id="7启动并加入开机启动">（7）启动并加入开机启动<a hidden class="anchor" aria-hidden="true" href="#7启动并加入开机启动">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">systemctl start docker <span style="color:#75715e"># 启动docker</span>
+systemctl enable docker <span style="color:#75715e"># 将docker加入开机启动</span>
+</code></pre></div><h3 id="8验证安装是否成功">（8）验证安装是否成功<a hidden class="anchor" aria-hidden="true" href="#8验证安装是否成功">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker version <span style="color:#75715e"># 有client和service两部分表示docker安装启动都成功了</span>
+</code></pre></div><h3 id="9相关命令">（9）相关命令<a hidden class="anchor" aria-hidden="true" href="#9相关命令">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">systemctl daemon-reload <span style="color:#75715e"># 重载所有修改过的配置文件</span>
+systemctl restart docker <span style="color:#75715e"># 重启docker</span>
+</code></pre></div><h1 id="二docker安装mysql主从">二、docker安装mysql（主从）<a hidden class="anchor" aria-hidden="true" href="#二docker安装mysql主从">#</a></h1>
+<h3 id="1拉取mysql镜像">（1）拉取mysql镜像<a hidden class="anchor" aria-hidden="true" href="#1拉取mysql镜像">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker pull mysql:5.7.34
+</code></pre></div><h3 id="2分别启动主从容器">（2）分别启动主从容器<a hidden class="anchor" aria-hidden="true" href="#2分别启动主从容器">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker run <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --restart always <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --name mysql-master <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --privileged<span style="color:#f92672">=</span>true <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    -v  /etc/localtime:/etc/localtime
+    -p 3306:3306 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    -e MYSQL_ROOT_PASSWORD<span style="color:#f92672">=</span><span style="color:#ae81ff">123456</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    -v /home/mysql/master/conf:/etc/mysql <span style="color:#ae81ff">\ </span><span style="color:#75715e"># 此处配置文件可以从未配置该映射的容器中通过docker cp拷贝</span>
+    -v /home/mysql/master/data:/var/lib/mysql <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    -d mysql:5.7.34 <span style="color:#75715e"># master 对外映射3306</span>
+docker run <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --restart always <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --name mysql-master <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --privileged<span style="color:#f92672">=</span>true <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    -v  /etc/localtime:/etc/localtime
+    -p 3307:3306 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    -e MYSQL_ROOT_PASSWORD<span style="color:#f92672">=</span><span style="color:#ae81ff">123456</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    -v /home/mysql/slave/conf:/etc/mysql <span style="color:#ae81ff">\ </span><span style="color:#75715e"># 此处配置文件可以从未配置该映射的容器中通过docker cp拷贝</span>
+    -v /home/mysql/slave/data:/var/lib/mysql <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    -d mysql:5.7.34 <span style="color:#75715e"># slave 对外映射3307</span>
+</code></pre></div><h3 id="3配置master">（3）配置master<a hidden class="anchor" aria-hidden="true" href="#3配置master">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 在宿主机中修改配置</span>
+vim master/conf/mysql.conf.d/mysqld.cnf
+<span style="color:#75715e"># 添加</span>
+server-id<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> <span style="color:#75715e"># 同一局域网内要唯一</span>
+log-bin<span style="color:#f92672">=</span>mysql-master-bin <span style="color:#75715e"># 开启二进制日志功能</span>
+</code></pre></div><p>修改完配置重启mysql-master</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker restart mysql-master
+</code></pre></div><h3 id="4在master数据库中创建数据同步用户">（4）在master数据库中创建数据同步用户<a hidden class="anchor" aria-hidden="true" href="#4在master数据库中创建数据同步用户">#</a></h3>
+<p>连接mysql-master数据库</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker exec -it mysql-master mysql -uroot -p
+</code></pre></div><p>创建用户并修改权限</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">USER</span> <span style="color:#e6db74">&#39;slave&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;%&#39;</span> IDENTIFIED <span style="color:#66d9ef">BY</span> <span style="color:#e6db74">&#39;123456&#39;</span>;
+<span style="color:#66d9ef">GRANT</span> REPLICATION SLAVE, REPLICATION CLIENT <span style="color:#66d9ef">ON</span> <span style="color:#f92672">*</span>.<span style="color:#f92672">*</span> <span style="color:#66d9ef">TO</span> <span style="color:#e6db74">&#39;slave&#39;</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;%&#39;</span>;
+</code></pre></div><h3 id="5配置slave">（5）配置slave<a hidden class="anchor" aria-hidden="true" href="#5配置slave">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 在宿主机中修改配置</span>
+vim slave/conf/mysql.conf.d/mysqld.cnf
+<span style="color:#75715e"># 添加</span>
+service-id<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span> <span style="color:#75715e"># 同一局域网内要唯一</span>
+log-bin<span style="color:#f92672">=</span>mysql-slave-bin <span style="color:#75715e"># 开启二进制日志，以备Slave作为其它Slave的Master时使用</span>
+relay_log<span style="color:#f92672">=</span>mysql-relay-bin <span style="color:#75715e"># 中继日志</span>
+</code></pre></div><h3 id="6关联master和slave">（6）关联master和slave<a hidden class="anchor" aria-hidden="true" href="#6关联master和slave">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 进入mysql-master</span>
+docker exec -it mysql-master /bin/bash
+<span style="color:#75715e"># 查看File和Position，用于关联</span>
+show master status <span style="color:#ae81ff">\G</span>;
+<span style="color:#75715e"># 获取mysql-master容器ip地址</span>
+docker inspect --format<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{{.NetworkSettings.IPAddress}}&#39;</span> mysql-master
+<span style="color:#75715e"># 进入mysql-slave</span>
+<span style="color:#75715e"># master_port：master容器的端口号</span>
+<span style="color:#75715e"># master_user：master中用于数据同步的用户</span>
+<span style="color:#75715e"># master_password：master中数据同步用户的密码</span>
+<span style="color:#75715e"># master_log_file：指定 slave 从哪个日志文件开始复制数据，即 show master status 中 File 字段的值</span>
+<span style="color:#75715e"># master_log_pos：从哪个位置开始读，即 show master status 中 Position 字段的值</span>
+master_connect_retry：如果连接失败，重试的时间间隔，单位是秒，默认是60秒
+change master to master_host<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;172.17.0.3&#39;</span>, master_user<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;slave&#39;</span>, master_password<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;123456&#39;</span>, master_port<span style="color:#f92672">=</span>3306, master_log_file<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mysql-master-bin.000001&#39;</span>, master_log_pos<span style="color:#f92672">=</span>1510, master_connect_retry<span style="color:#f92672">=</span>30;
+</code></pre></div><h3 id="7查看主从同步状态">（7）查看主从同步状态<a hidden class="anchor" aria-hidden="true" href="#7查看主从同步状态">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 开启主从同步，从库只会增量同步主库</span>
+start slave
+<span style="color:#75715e"># 查看状态，Slave_IO_Running 和 Slave_SQL_Running 都为Yes则正常。失败日志查看Last_IO_Error</span>
+show slave status <span style="color:#ae81ff">\G</span>;
+<span style="color:#75715e"># 关闭主从同步</span>
+stop slave
+</code></pre></div><h1 id="三安装单机nacos">三、安装单机nacos<a hidden class="anchor" aria-hidden="true" href="#三安装单机nacos">#</a></h1>
+<p><a href="https://nacos.io/zh-cn/docs/quick-start.html">官方文档</a></p>
+<h3 id="1下载安装nacos">（1）下载安装nacos<a hidden class="anchor" aria-hidden="true" href="#1下载安装nacos">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 下载nacos</span>
+wget https://github.com/alibaba/nacos/releases/download/2.0.2/nacos-server-2.0.2.zip
+<span style="color:#75715e"># 解压</span>
+unzip nacos-server-2.0.2.zip
+</code></pre></div><h3 id="2配置mysql数据库">（2）配置mysql数据库<a hidden class="anchor" aria-hidden="true" href="#2配置mysql数据库">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 将nacos/conf/nacos-mysql.sql 导入到mysql数据库</span>
+vim nacos/conf/application.properties
+<span style="color:#75715e">### If use MySQL as datasource:</span>
+spring.datasource.platform<span style="color:#f92672">=</span>mysql
+
+<span style="color:#75715e">### Count of DB:</span>
+db.num<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+
+<span style="color:#75715e">### Connect URL of DB:</span>
+db.url.0<span style="color:#f92672">=</span>jdbc:mysql://127.0.0.1:3306/nacos?characterEncoding<span style="color:#f92672">=</span>utf8&amp;connectTimeout<span style="color:#f92672">=</span>1000&amp;socketTimeout<span style="color:#f92672">=</span>3000&amp;autoReconnect<span style="color:#f92672">=</span>true&amp;useUnicode<span style="color:#f92672">=</span>true&amp;useSSL<span style="color:#f92672">=</span>false&amp;serverTimezone<span style="color:#f92672">=</span>UTC
+db.user.0<span style="color:#f92672">=</span>root
+db.password.0<span style="color:#f92672">=</span><span style="color:#ae81ff">123456</span>
+</code></pre></div><h3 id="3启动nacos">（3）启动nacos<a hidden class="anchor" aria-hidden="true" href="#3启动nacos">#</a></h3>
+<pre tabindex="0"><code>cd nacos/bin
+# 单机版启动
+sh startup.sh -m standalone
+</code></pre><h1 id="四安装influxdb">四、安装InfluxDB<a hidden class="anchor" aria-hidden="true" href="#四安装influxdb">#</a></h1>
+<h3 id="1拉取influxdb镜像">（1）拉取InfluxDB镜像<a hidden class="anchor" aria-hidden="true" href="#1拉取influxdb镜像">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker pull influxdb:2.0.7
+</code></pre></div><h3 id="2创建桥接网络">（2）创建桥接网络<a hidden class="anchor" aria-hidden="true" href="#2创建桥接网络">#</a></h3>
+<pre tabindex="0"><code>docker network create --driver bridge influxdb-telegraf-net
+</code></pre><h3 id="3生成默认配置文件">（3）生成默认配置文件<a hidden class="anchor" aria-hidden="true" href="#3生成默认配置文件">#</a></h3>
+<pre tabindex="0"><code>docker run \
+  --rm influxdb:2.0.7 \
+  influxd print-config &gt; config.yml
+</code></pre><h3 id="4启动influxdb">（4）启动InfluxDB<a hidden class="anchor" aria-hidden="true" href="#4启动influxdb">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker run -d <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  --name influxdb <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -p 8086:8086 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -v /home/influxdb/configs/config.yml:/etc/influxdb2/config.yml <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -v /home/influxdb/configs:/etc/influxdb2 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -v /home/influxdb/data:/var/lib/influxdb2 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -v /home/influxdb/influx:/root/.influxdbv2 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  --net<span style="color:#f92672">=</span>influxdb-telegraf-net <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  influxdb:2.0.7
+</code></pre></div><h3 id="5配置influxdb">（5）配置InfluxDB<a hidden class="anchor" aria-hidden="true" href="#5配置influxdb">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 进入influxdb容器</span>
+docker exec -it influxdb /bin/bash
+<span style="color:#75715e"># 安装，设置用户名密码、org、bucket，生成token</span>
+influx setup
+</code></pre></div><h1 id="五安装telegraf">五、安装Telegraf<a hidden class="anchor" aria-hidden="true" href="#五安装telegraf">#</a></h1>
+<p><a href="https://docs.influxdata.com/telegraf/v1.19/introduction/installation/">官方文档</a></p>
+<h3 id="1拉取telegraf镜像">（1）拉取telegraf镜像<a hidden class="anchor" aria-hidden="true" href="#1拉取telegraf镜像">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker pull telegraf
+</code></pre></div><h3 id="2启动telegraf">（2）启动Telegraf<a hidden class="anchor" aria-hidden="true" href="#2启动telegraf">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker run -d <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  --name telegraf <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -v /home/telegraf/conf:/etc/telegraf <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  --net<span style="color:#f92672">=</span>influxdb-telegraf-net <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  telegraf
+</code></pre></div><h1 id="六安装grafana">六、安装Grafana<a hidden class="anchor" aria-hidden="true" href="#六安装grafana">#</a></h1>
+<h3 id="1拉取grafana镜像">（1）拉取grafana镜像<a hidden class="anchor" aria-hidden="true" href="#1拉取grafana镜像">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker pull grafana/grafana
+</code></pre></div><h3 id="2启动grafana">（2）启动grafana<a hidden class="anchor" aria-hidden="true" href="#2启动grafana">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker run -d --name grafana -p 3000:3000 -v /home/grafana/data:/var/lib/grafana grafana/grafana
+</code></pre></div><h1 id="spring-cloud-alibaba">Spring Cloud Alibaba<a hidden class="anchor" aria-hidden="true" href="#spring-cloud-alibaba">#</a></h1>
+<h3 id="1nacos">1、<strong>Nacos</strong><a hidden class="anchor" aria-hidden="true" href="#1nacos">#</a></h3>
+<p>一个更易于构建云原生应用的动态服务发现、配置管理和服务管理平台。版本：2.0.1</p>
+<p><a href="https://github.com/alibaba/nacos/releases/download/2.0.1/nacos-server-2.0.1.tar.gz">nacos包</a></p>
+<p>单机模式启动：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sh startup.sh -m standalone
+</code></pre></div><h3 id="2sentinel">2、<strong>Sentinel</strong><a hidden class="anchor" aria-hidden="true" href="#2sentinel">#</a></h3>
+<p>把流量作为切入点，从流量控制、熔断降级、系统负载保护等多个维度保护服务的稳定性。版本：1.8.2</p>
+<p><a href="https://github.com/alibaba/Sentinel/releases/download/1.8.2/sentinel-dashboard-1.8.2.jar">sentinel-dashboard控制台jar包</a></p>
+<p>启动sentinel控制台：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">java -Dserver.port<span style="color:#f92672">=</span><span style="color:#ae81ff">8080</span> -Dcsp.sentinel.dashboard.server<span style="color:#f92672">=</span>localhost:8080 -Dproject.name<span style="color:#f92672">=</span>sentinel-dashboard -jar sentinel-dashboard-1.8.2.jar
+</code></pre></div><p>Spring Cloud Gateway 网关接入到 Sentinel 控制台，在pom中添加：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">    <span style="color:#f92672">&lt;dependency&gt;</span>
+      <span style="color:#f92672">&lt;groupId&gt;</span>com.alibaba.cloud<span style="color:#f92672">&lt;/groupId&gt;</span>
+      <span style="color:#f92672">&lt;artifactId&gt;</span>spring-cloud-starter-alibaba-sentinel<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;/dependency&gt;</span>
+    <span style="color:#f92672">&lt;dependency&gt;</span>
+      <span style="color:#f92672">&lt;groupId&gt;</span>com.alibaba.csp<span style="color:#f92672">&lt;/groupId&gt;</span>
+      <span style="color:#f92672">&lt;artifactId&gt;</span>sentinel-spring-cloud-gateway-adapter<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;/dependency&gt;</span>
+</code></pre></div><h3 id="3rocketmq">3、RocketMQ<a hidden class="anchor" aria-hidden="true" href="#3rocketmq">#</a></h3>
+<p>开源的分布式消息系统，基于高可用分布式集群技术，提供低延时的、高可靠的消息发布与订阅服务。</p>
+<h3 id="4dubbo">4、<strong>Dubbo</strong><a hidden class="anchor" aria-hidden="true" href="#4dubbo">#</a></h3>
+<p>使用 Dubbo RPC 作为服务间调用。</p>
+<p>引入dubbo：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">    <span style="color:#f92672">&lt;dependency&gt;</span>
+      <span style="color:#f92672">&lt;groupId&gt;</span>com.alibaba.cloud<span style="color:#f92672">&lt;/groupId&gt;</span>
+      <span style="color:#f92672">&lt;artifactId&gt;</span>spring-cloud-starter-dubbo<span style="color:#f92672">&lt;/artifactId&gt;</span>
+    <span style="color:#f92672">&lt;/dependency&gt;</span>
+</code></pre></div><p>配置web-demo-service作为provider，在application.yml中添加以下配置：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">dubbo</span>:
+  <span style="color:#f92672">registry</span>:
+    <span style="color:#75715e"># 使用 spring cloud 注册中心</span>
+    <span style="color:#f92672">address</span>: <span style="color:#ae81ff">spring-cloud://localhost</span>
+  <span style="color:#f92672">protocol</span>:
+    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">dubbo</span>
+    <span style="color:#f92672">port</span>: -<span style="color:#ae81ff">1</span>
+    <span style="color:#75715e"># 传输对象实现序列化接口即可</span>
+<span style="color:#75715e">#    serialization: kryo</span>
+  <span style="color:#f92672">cloud</span>:
+    <span style="color:#f92672">subscribed-services</span>: <span style="color:#ae81ff">web-oauth-service</span> <span style="color:#75715e"># 可不填，不填会默认订阅所有service</span>
+  <span style="color:#f92672">consumer</span>:
+    <span style="color:#f92672">check</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#f92672">provider</span>:
+    <span style="color:#75715e"># 轮询</span>
+    <span style="color:#f92672">loadbalance</span>: <span style="color:#ae81ff">roundrobin</span>
+  <span style="color:#f92672">scan</span>:
+    <span style="color:#75715e"># provider service</span>
+    <span style="color:#f92672">base-packages</span>: <span style="color:#ae81ff">com.ms.cloud.demo.service.impl</span>
+</code></pre></div><p>实现provider服务：web-common模块中定义service接口UserService。web-demo-service中的UserServiceImpl实现UserService，并在UserServiceImpl上添加@DubboService。</p>
+<p>配置web-oauth-service作为consumer，在application.yml中添加以下配置：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">dubbo</span>:
+  <span style="color:#f92672">registry</span>:
+    <span style="color:#75715e"># 使用 spring cloud 注册中心</span>
+    <span style="color:#f92672">address</span>: <span style="color:#ae81ff">spring-cloud://localhost</span>
+  <span style="color:#f92672">protocol</span>:
+    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">dubbo</span>
+    <span style="color:#f92672">port</span>: -<span style="color:#ae81ff">1</span>
+    <span style="color:#75715e"># 传输对象实现序列化接口即可</span>
+<span style="color:#75715e">#    serialization: kryo</span>
+  <span style="color:#f92672">cloud</span>:
+    <span style="color:#f92672">subscribed-services</span>: <span style="color:#ae81ff">web-demo-service</span>
+  <span style="color:#f92672">consumer</span>:
+    <span style="color:#f92672">check</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#f92672">provider</span>:
+    <span style="color:#75715e"># 轮询</span>
+    <span style="color:#f92672">loadbalance</span>: <span style="color:#ae81ff">roundrobin</span>
+</code></pre></div><p>consumer中使用provider提供的服务：</p>
+<pre tabindex="0"><code>@DubboReference
+private UserService userService;
+</code></pre><h3 id="5seata">5、<strong>Seata</strong><a hidden class="anchor" aria-hidden="true" href="#5seata">#</a></h3>
+<p>一个易于使用的高性能微服务分布式事务解决方案。</p>
+<h3 id="6arthas">6、Arthas<a hidden class="anchor" aria-hidden="true" href="#6arthas">#</a></h3>
+<p>开源的Java动态追踪工具，基于字节码增强技术，功能非常强大。</p>
+<h3 id="7spring-cloud-loadbalancer">7、<strong>Spring Cloud Loadbalancer</strong><a hidden class="anchor" aria-hidden="true" href="#7spring-cloud-loadbalancer">#</a></h3>
+<p>客户端负载均衡。</p>
+<h3 id="8spring-cloud-gateway">8、<strong>Spring Cloud Gateway</strong><a hidden class="anchor" aria-hidden="true" href="#8spring-cloud-gateway">#</a></h3>
+<p>服务网关。</p>
+<p>转发认证请求到web-oauth-service或业务请求到其他服务；对过滤路径鉴权；</p>
+<p>网关鉴权过滤器：</p>
+<pre tabindex="0"><code class="language-。" data-lang="。">AuthFilter.filter
+</code></pre><h3 id="9spring-boot-admin">9、<strong>Spring-boot-admin</strong><a hidden class="anchor" aria-hidden="true" href="#9spring-boot-admin">#</a></h3>
+<p>健康服务检查。</p>
+<h3 id="10oauth2--jwt">10、<strong>Oauth2 + JWT</strong><a hidden class="anchor" aria-hidden="true" href="#10oauth2--jwt">#</a></h3>
+<p>认证鉴权。</p>
+<p>登录认证接口：http://localhost:9001/web-oauth-service/login</p>
+<p>认证流程：web-oauth服务</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">1<span style="color:#960050;background-color:#1e0010">、</span>入口<span style="color:#960050;background-color:#1e0010">，</span>安全过滤器链中配置UsernameAuthenticationFilter
+2<span style="color:#960050;background-color:#1e0010">、</span>UsernameAuthenticationFilter<span style="color:#f92672">.</span><span style="color:#a6e22e">attemptAuthentication</span><span style="color:#f92672">()</span> <span style="color:#f92672">-&gt;</span> authenticationManager<span style="color:#f92672">.</span><span style="color:#a6e22e">authenticate</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> UsernamePasswordAuthenticationToken<span style="color:#f92672">(</span>username<span style="color:#f92672">,</span> password<span style="color:#f92672">))</span> <span style="color:#75715e">// 获取请求参数，构造UsernamePasswordAuthenticationToken进行认证
+</span><span style="color:#75715e"></span>3<span style="color:#960050;background-color:#1e0010">、</span>ProviderManager<span style="color:#f92672">.</span><span style="color:#a6e22e">authenticate</span> <span style="color:#f92672">-&gt;</span> provider<span style="color:#f92672">.</span><span style="color:#a6e22e">authenticate</span><span style="color:#f92672">(</span>authentication<span style="color:#f92672">)</span>
+4<span style="color:#960050;background-color:#1e0010">、</span>AbstractUserDetailsAuthenticationProvider<span style="color:#f92672">.</span><span style="color:#a6e22e">authenticate</span><span style="color:#f92672">()</span> <span style="color:#f92672">-&gt;</span> retrieveUser<span style="color:#f92672">(</span>username<span style="color:#f92672">,</span> <span style="color:#f92672">(</span>UsernamePasswordAuthenticationToken<span style="color:#f92672">)</span> authentication<span style="color:#f92672">)</span>
+5<span style="color:#960050;background-color:#1e0010">、</span>DaoAuthenticationProvider<span style="color:#f92672">.</span><span style="color:#a6e22e">retrieveUser</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getUserDetailsService</span><span style="color:#f92672">().</span><span style="color:#a6e22e">loadUserByUsername</span><span style="color:#f92672">(</span>username<span style="color:#f92672">)</span>
+6<span style="color:#960050;background-color:#1e0010">、</span>UserDetailsServiceImpl<span style="color:#f92672">.</span><span style="color:#a6e22e">loadUserByUsername</span><span style="color:#f92672">()</span>
+7<span style="color:#960050;background-color:#1e0010">、</span>JWTAuthenticationSuccessHandler<span style="color:#f92672">.</span><span style="color:#a6e22e">onAuthenticationSuccess</span><span style="color:#f92672">()</span>
+</code></pre></div><p>鉴权流程：gateway服务</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">1<span style="color:#960050;background-color:#1e0010">、</span>入口<span style="color:#960050;background-color:#1e0010">，</span>配置过滤器AuthFilter实现GlobalFilter
+2<span style="color:#960050;background-color:#1e0010">、</span>AuthFilter<span style="color:#f92672">.</span><span style="color:#a6e22e">filter进行校验</span>
+3<span style="color:#960050;background-color:#1e0010">、</span>请求头包含token<span style="color:#960050;background-color:#1e0010">，</span>则校验token
+4<span style="color:#960050;background-color:#1e0010">、</span>判断是否是过滤路径
+5<span style="color:#960050;background-color:#1e0010">、</span>判断请求url是否有权限
+6<span style="color:#960050;background-color:#1e0010">、</span>请求头不包含token<span style="color:#960050;background-color:#1e0010">，</span>则判断4<span style="color:#960050;background-color:#1e0010">、</span>5
+</code></pre></div><p><img loading="lazy" src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2017/12/10/16040f1755bb3290~tplv-t2oaga2asx-watermark.awebp" alt="ms"  />
+</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://example.org/tags/%E6%9E%B6%E6%9E%84/">架构</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2022 <a href="http://example.org/">My New Hugo Site</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
