@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Dockers on My New Hugo Site</title>
+    <link>https://nilzyj.github.io/docker/</link>
+    <description>Recent content in Dockers on My New Hugo Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 19 Jun 2021 14:10:10 +0000</lastBuildDate><atom:link href="https://nilzyj.github.io/docker/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>docker 命令</title>
+      <link>https://nilzyj.github.io/docker/docker%E5%91%BD%E4%BB%A4/</link>
+      <pubDate>Sat, 19 Jun 2021 14:10:10 +0000</pubDate>
+      
+      <guid>https://nilzyj.github.io/docker/docker%E5%91%BD%E4%BB%A4/</guid>
+      <description>&lt;h1 id=&#34;一docker-基础命令&#34;&gt;一、docker 基础命令&lt;/h1&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 更新容器自动重启
+docker update --restart=always 容器名称
+&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 进入容器
+docker exec -it 容器名称 /bin/bash
+&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 获取容器ip
+docker inspect --format=&#39;{{.NetworkSettings.IPAddress}}&#39; 容器名称
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&#34;二docker-启动容器&#34;&gt;二、docker 启动容器&lt;/h1&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 启动InfluxDB
+docker run --name influxdb -p 8086:8086 influxdb:2.0.7
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
