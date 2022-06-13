@@ -274,7 +274,7 @@ pathogen 或 vundle，tagbar, CtrlP, Gundo, UltiSnips，surround，Syntastic，C
 &lt;td style="text-align:left">替换当前光标到行末的内容&lt;/td>
 &lt;/tr>
 &lt;tr>
-&lt;td style="text-align:left">:s/old/new&lt;/td>
+&lt;td style="text-align:left">s/old/new&lt;/td>
 &lt;td style="text-align:left">在一行内替换头一个字符串 old 为新的字符串 new&lt;/td>
 &lt;/tr>
 &lt;tr>
